@@ -5,9 +5,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 
-const feedRoutes = require('./routes/feed');
-const authRoutes = require('./routes/auth');
-
 const app = express();
 
 const fileStorage = multer.diskStorage({
@@ -39,11 +36,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
-
-app.use('/feed', feedRoutes);
-app.use('/auth', authRoutes);
-
 app.use((error, req, res, next) => {
     console.log(error);
     const statusCode = error.statusCode || 500;
@@ -56,9 +48,5 @@ mongoose.connect(
     'mongodb+srv://maxim:Dubakov88@onlineshop-nephe.mongodb.net/messages'
 )
     .then(result => {
-        const server = app.listen(8080);
-        const io = require('./socket').init(server);
-        io.on('connection', socket => {
-            console.log('Client Connected');
-        });
+        app.listen(8080);
     }).catch(err => console.log(err))
